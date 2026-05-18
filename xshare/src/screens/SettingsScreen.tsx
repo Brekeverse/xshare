@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Switch, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Switch, Platform, NativeModules, Alert } from 'react-native';
 import { Overlay } from '../modules/overlay';
 
 export default function SettingsScreen() {
@@ -7,6 +7,7 @@ export default function SettingsScreen() {
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
+    console.log('OverlayModule:', NativeModules.OverlayModule);
     checkPermission();
   }, []);
 
@@ -16,14 +17,9 @@ export default function SettingsScreen() {
   };
 
   const handleRequestPermission = async () => {
-    try {
-      console.log('Pidiendo permiso...');
-      await Overlay.requestPermission();
-      console.log('Permiso pedido');
-      setTimeout(checkPermission, 2000);
-    } catch (e) {
-      console.log('Error:', e);
-    }
+    Alert.alert('Debug', 'Módulos: ' + JSON.stringify(Object.keys(NativeModules)));
+    await Overlay.requestPermission();
+    setTimeout(checkPermission, 2000);
   };
 
   const handleToggleOverlay = async () => {
@@ -60,15 +56,9 @@ export default function SettingsScreen() {
         </Text>
 
         {!hasPermission ? (
-          <TouchableOpacity 
-  style={styles.button} 
-  onPress={() => {
-    console.log('Boton tocado');
-    handleRequestPermission();
-  }}
->
-  <Text style={styles.buttonText}>Dar permiso de superposición</Text>
-</TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleRequestPermission}>
+            <Text style={styles.buttonText}>Dar permiso de superposición</Text>
+          </TouchableOpacity>
         ) : (
           <View style={styles.row}>
             <Text style={styles.rowLabel}>{isRunning ? 'Activo' : 'Inactivo'}</Text>
