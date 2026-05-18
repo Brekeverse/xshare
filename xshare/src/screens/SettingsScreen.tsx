@@ -16,8 +16,14 @@ export default function SettingsScreen() {
   };
 
   const handleRequestPermission = async () => {
-    await Overlay.requestPermission();
-    setTimeout(checkPermission, 1000);
+    try {
+      console.log('Pidiendo permiso...');
+      await Overlay.requestPermission();
+      console.log('Permiso pedido');
+      setTimeout(checkPermission, 2000);
+    } catch (e) {
+      console.log('Error:', e);
+    }
   };
 
   const handleToggleOverlay = async () => {
@@ -54,9 +60,15 @@ export default function SettingsScreen() {
         </Text>
 
         {!hasPermission ? (
-          <TouchableOpacity style={styles.button} onPress={handleRequestPermission}>
-            <Text style={styles.buttonText}>Dar permiso de superposición</Text>
-          </TouchableOpacity>
+          <TouchableOpacity 
+  style={styles.button} 
+  onPress={() => {
+    console.log('Boton tocado');
+    handleRequestPermission();
+  }}
+>
+  <Text style={styles.buttonText}>Dar permiso de superposición</Text>
+</TouchableOpacity>
         ) : (
           <View style={styles.row}>
             <Text style={styles.rowLabel}>{isRunning ? 'Activo' : 'Inactivo'}</Text>
