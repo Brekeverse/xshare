@@ -1,12 +1,10 @@
-import { NativeModules, Platform } from 'react-native';
-
-const { OverlayModule } = NativeModules;
+import { NativeModules, Platform, Linking } from 'react-native';
 
 export const Overlay = {
   canDrawOverlays: async (): Promise<boolean> => {
     if (Platform.OS !== 'android') return false;
     try {
-      return await OverlayModule.canDrawOverlays();
+      return await NativeModules.OverlayModule?.canDrawOverlays() ?? false;
     } catch {
       return false;
     }
@@ -15,27 +13,27 @@ export const Overlay = {
   requestPermission: async (): Promise<void> => {
     if (Platform.OS !== 'android') return;
     try {
-      await OverlayModule.requestPermission();
+      await Linking.openSettings();
     } catch (e) {
-      console.error('Error pidiendo permiso overlay', e);
+      console.error('Error abriendo ajustes', e);
     }
   },
 
   startService: async (): Promise<void> => {
     if (Platform.OS !== 'android') return;
     try {
-      await OverlayModule.startService();
+      await NativeModules.OverlayModule?.startService();
     } catch (e) {
-      console.error('Error iniciando overlay service', e);
+      console.error('Error iniciando overlay', e);
     }
   },
 
   stopService: async (): Promise<void> => {
     if (Platform.OS !== 'android') return;
     try {
-      await OverlayModule.stopService();
+      await NativeModules.OverlayModule?.stopService();
     } catch (e) {
-      console.error('Error deteniendo overlay service', e);
+      console.error('Error deteniendo overlay', e);
     }
   },
 };
