@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import CollectionScreen from '../screens/CollectionScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +31,11 @@ export default function AppNavigator() {
           name="Colección"
           component={CollectionScreen}
           options={{ tabBarIcon: () => <Text>📚</Text> }}
+        />
+        <Tab.Screen
+          name="Ajustes"
+          component={SettingsScreen}
+          options={{ tabBarIcon: () => <Text>⚙️</Text>, headerShown: false }}
         />
       </Tab.Navigator>
     </NavigationContainer>
